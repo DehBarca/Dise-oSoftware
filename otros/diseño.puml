@@ -1,0 +1,35 @@
+@startuml diseño
+
+enum Periodicidad{
+    MENSUAL
+    ANUAL
+}
+
+class Usuario {
+    +id: str
+    +nombre: str
+}
+
+class Plan {
+    +id: str
+    +nombre: str
+    +precio_mxn: float
+    +periodicidad: Periodicidad
+}
+
+class Suscripcion {
+    +id: str
+    +usuario: Usuario
+    +plan: Plan
+    +activa: bool = False
+    +activar(): None
+    +cancelar(): None
+}
+
+Usuario "1" *-- "0..*" Suscripcion : Tiene
+Plan "1" -- "0..*" Suscripcion : Incluye
+
+Plan ..|> Periodicidad : Usa
+' Suscripcion --> Usuario : usuario
+' Suscripcion --> Plan : plan
+@enduml

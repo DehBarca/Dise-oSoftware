@@ -1,0 +1,92 @@
+@startuml tareapilares
+' Interfaces y Protocols
+interface Notificador {
+    +enviar(mensaje: str): None
+}
+
+' Clases concretas de Notificador
+class NotificadorEmail {
+    -_destinatario: str
+    +enviar(mensaje: str): None
+}
+
+class NotificadorWebhook {
+    -_url: str
+    +enviar(mensaje: str): None
+}
+
+NotificadorEmail ..|> Notificador
+NotificadorWebhook ..|> Notificador
+
+' NUEVO: NotificadorSMS
+class NotificadorSMS {
+    -_numero: str
+    +enviar(mensaje: str): None
+}
+NotificadorSMS ..|> Notificador
+
+' NUEVO: Logger (composición con GestorAlertas)
+class Logger {
+    +log(mensaje: str): None
+}
+
+' NUEVO: Usuario (agregación con Sensor)
+class Usuario {
+    +nombre: str
+    +email: str
+}
+
+' NUEVO: Ubicacion (composición con Sensor)
+class Ubicacion {
+    +latitud: float
+    +longitud: float
+}
+
+' NUEVO: SensorHumedad
+class SensorHumedad {
+    +umbral: float = 60.0
+    +en_alerta(): bool
+}
+SensorHumedad --|> Sensor
+
+' Clases Sensor y derivadas
+abstract class Sensor {
+    +id: str
+    +ventana: int = 5
+    -_calibracion: float
+    -_buffer: list[float]
+    +leer(valor: float): None
+    +promedio: float
+    +en_alerta(): bool
+}
+
+class SensorTemperatura {
+    +umbral: float = 80.0
+    +en_alerta(): bool
+}
+
+class SensorVibracion {
+    +rms_umbral: float = 2.5
+    +en_alerta(): bool
+}
+
+SensorTemperatura --|> Sensor
+SensorVibracion --|> Sensor
+
+' GestorAlertas
+class GestorAlertas {
+    -_sensores: List[Sensor]
+    -_notificadores: List[Notificador]
+    +evaluar_y_notificar(): None
+    -_logger: Logger
+}
+
+GestorAlertas o-- "1..*" Sensor
+GestorAlertas o-- "1..*" Notificador
+GestorAlertas *-- Logger
+
+' Relaciones adicionales
+Sensor o-- Ubicacion : ubicacion
+Sensor o-- Usuario : propietario
+
+@enduml
