@@ -1,0 +1,31 @@
+@startuml MovieSearchSequence
+
+' ===== DIAGRAMA DE SECUENCIA =====
+title Búsqueda de Películas
+
+actor Usuario
+participant BuscadorPeliculas as Buscador
+participant TMDBApiClient as API
+participant "TMDB API" as ExternalAPI
+
+Usuario -> Buscador: buscar("Inception")
+activate Buscador
+
+Buscador -> API: search_movie("Inception")
+activate API
+
+API -> ExternalAPI: GET /search/movie?query=Inception
+activate ExternalAPI
+
+ExternalAPI -> API: JSON con películas
+deactivate ExternalAPI
+
+API -> Buscador: datos de películas
+deactivate API
+
+Buscador -> Buscador: crear objetos Pelicula
+
+Buscador -> Usuario: List[Pelicula]
+deactivate Buscador
+
+@enduml

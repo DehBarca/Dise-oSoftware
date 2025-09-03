@@ -1,0 +1,38 @@
+@startuml MovieSearchClasses
+
+' ===== DIAGRAMA DE CLASES (Sincronizado con código) =====
+
+class InterfazUsuario {
+    +ejecutar(): void
+    +capturar_titulo(): str
+    +mostrar_resultados(): void
+}
+
+class BuscadorPeliculas {
+    +buscar(titulo: str): List[Pelicula]
+}
+
+class TMDBApiClient {
+    -api_key: str
+    +search_movie(query: str): dict
+}
+
+class Pelicula {
+    +titulo: str
+    +año: int
+    +sinopsis: str
+    +id: int
+    +calificacion: float
+}
+
+class ApiException {
+    +mensaje: str
+}
+
+' Relaciones
+InterfazUsuario --> BuscadorPeliculas : usa
+BuscadorPeliculas --> TMDBApiClient : usa
+BuscadorPeliculas --> Pelicula : crea
+TMDBApiClient --> ApiException : lanza
+
+@enduml
