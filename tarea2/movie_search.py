@@ -1,9 +1,3 @@
-"""
-Módulo para búsqueda de películas usando The Movie Database (TMDB) API
-Autor: Arquitecto de Software
-Fecha: Septiembre 2025
-"""
-
 import requests
 from typing import List, Dict, Optional
 from dataclasses import dataclass

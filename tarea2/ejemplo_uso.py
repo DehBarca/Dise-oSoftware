@@ -1,7 +1,3 @@
-"""
-Ejemplo de uso del módulo de búsqueda de películas
-"""
-
 from movie_search import TMDBApiClient, BuscadorPeliculas, InterfazUsuario, ApiException
 
 # Reemplaza con tu API key real
@@ -40,13 +36,11 @@ def ejemplo_interfaz_completa():
         buscador = BuscadorPeliculas(api_client)
         interfaz = InterfazUsuario(buscador)
         
-        # Ejecutar interfaz
         interfaz.ejecutar()
         
     except Exception as e:
         print(f"Error: {e}")
 
 if __name__ == "__main__":
-    # Ejecutar ejemplos
     ejemplo_basico()
     ejemplo_interfaz_completa()

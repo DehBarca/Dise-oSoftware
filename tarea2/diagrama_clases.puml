@@ -1,6 +1,6 @@
 @startuml MovieSearchClasses
 
-' ===== DIAGRAMA DE CLASES (Sincronizado con código) =====
+' ===== DIAGRAMA DE CLASES =====
 
 class InterfazUsuario {
     +ejecutar(): void
