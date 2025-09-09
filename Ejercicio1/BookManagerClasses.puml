@@ -1,0 +1,89 @@
+@startuml BookManagerClasses
+
+title Book Manager - Diagrama de Clases Detallado
+
+class BookManager {
+    -userProfileService: UserProfileService
+    -bookSearchService: BookSearchService
+    -database: DynamoDBClient
+    +addBookToLibrary(userId: string, bookId: string): Promise<Result>
+    +markBookAsRead(userId: string, bookId: string): Promise<Result>
+    +getReadBooks(userId: string): Promise<Book[]>
+    +searchBookInLibrary(userId: string, query: string): Promise<Book[]>
+    +removeBookFromLibrary(userId: string, bookId: string): Promise<Result>
+}
+
+class Book {
+    +id: string
+    +title: string
+    +author: string
+    +isbn: string
+    +genre: string[]
+    +publishedYear: number
+    +rating: number
+    +description: string
+    +coverUrl: string
+    +isRead: boolean
+    +readDate?: Date
+    +userRating?: number
+    +userNotes?: string
+}
+
+class UserLibrary {
+    +userId: string
+    +books: Book[]
+    +preferences: ReadingPreferences
+    +createdAt: Date
+    +updatedAt: Date
+    +totalBooksRead: number
+    +favoriteGenres: string[]
+}
+
+class ReadingPreferences {
+    +favoriteGenres: string[]
+    +preferredAuthors: string[]
+    +readingGoal: number
+    +languagePreference: string
+    +contentRating: string
+}
+
+interface BookRepository {
+    +save(userLibrary: UserLibrary): Promise<void>
+    +findByUserId(userId: string): Promise<UserLibrary>
+    +updateBookStatus(userId: string, bookId: string, status: BookStatus): Promise<void>
+    +deleteBook(userId: string, bookId: string): Promise<void>
+}
+
+class DynamoBookRepository {
+    -client: DynamoDBClient
+    -tableName: string
+    +save(userLibrary: UserLibrary): Promise<void>
+    +findByUserId(userId: string): Promise<UserLibrary>
+    +updateBookStatus(userId: string, bookId: string, status: BookStatus): Promise<void>
+    +deleteBook(userId: string, bookId: string): Promise<void>
+}
+
+enum BookStatus {
+    WANT_TO_READ
+    CURRENTLY_READING
+    READ
+    DNF
+}
+
+class BookSearchService {
+    +searchByTitle(title: string): Promise<Book[]>
+    +searchByAuthor(author: string): Promise<Book[]>
+    +getBookDetails(bookId: string): Promise<Book>
+}
+
+' Relaciones
+BookManager --> Book : maneja
+BookManager --> UserLibrary : gestiona
+BookManager --> BookRepository : usa
+BookRepository <|-- DynamoBookRepository : implementa
+UserLibrary --> Book : contiene
+UserLibrary --> ReadingPreferences : tiene
+Book --> BookStatus : tiene estado
+BookManager --> BookSearchService : utiliza
+
+@enduml

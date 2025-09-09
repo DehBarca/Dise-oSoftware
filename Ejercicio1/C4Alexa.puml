@@ -1,0 +1,30 @@
+@startuml C4-Code
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Book Manager Component - Diagrama de Código (C4)
+
+Container_Boundary(book_manager, "Book Manager Component") {
+    
+    Component(book_manager_class, "BookManager", "Class", "Gestiona operaciones de libros del usuario")
+    Component(book_model, "Book", "Model", "Representa un libro con sus propiedades")
+    Component(user_library, "UserLibrary", "Model", "Biblioteca personal del usuario")
+    Component(reading_preferences, "ReadingPreferences", "Model", "Preferencias de lectura del usuario")
+    Component(book_repository, "BookRepository", "Interface", "Contrato para persistencia de libros")
+    Component(dynamo_repository, "DynamoBookRepository", "Implementation", "Implementación DynamoDB del repositorio")
+    Component(book_search, "BookSearchService", "Service", "Servicio de búsqueda de libros")
+}
+
+Container_Ext(dynamodb, "DynamoDB", "Database", "Base de datos NoSQL")
+Container_Ext(external_apis, "External APIs", "APIs", "Goodreads, Open Library")
+
+Rel(book_manager_class, book_model, "maneja")
+Rel(book_manager_class, user_library, "gestiona")
+Rel(book_manager_class, book_repository, "usa")
+Rel(book_repository, dynamo_repository, "implementado por")
+Rel(user_library, book_model, "contiene")
+Rel(user_library, reading_preferences, "incluye")
+Rel(book_manager_class, book_search, "utiliza")
+Rel(dynamo_repository, dynamodb, "persiste en")
+Rel(book_search, external_apis, "consulta")
+
+@enduml

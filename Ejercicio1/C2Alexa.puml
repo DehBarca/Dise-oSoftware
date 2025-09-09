@@ -1,0 +1,33 @@
+@startuml C2-Container
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+title Sistema de Biblioteca Alexa - Diagrama de Contenedores
+
+Person(usuario, "Usuario", "Persona que gestiona su biblioteca personal")
+
+System_Boundary(alexa_system, "Sistema Biblioteca Alexa") {
+    Container(alexa_handler, "Alexa Skill Handler", "Node.js/Lambda", "Maneja las intenciones de Alexa y procesa comandos de voz")
+    
+    Container(biblioteca_service, "Biblioteca Service", "Node.js/Lambda", "Lógica de negocio para gestionar libros, recomendaciones y usuario")
+    
+    Container(user_db, "Base de Datos Usuario", "DynamoDB", "Almacena libros leídos, preferencias y perfil del usuario")
+    
+    Container(cache_layer, "Cache de Recomendaciones", "ElastiCache/Redis", "Cache temporal para recomendaciones y búsquedas frecuentes")
+}
+
+System_Ext(alexa_service, "Amazon Alexa Service", "Plataforma de Amazon Alexa")
+System_Ext(goodreads_api, "Goodreads API", "API externa para recomendaciones")
+System_Ext(open_library, "Open Library API", "API externa para información de libros")
+
+Rel(usuario, alexa_service, "Comandos de voz")
+Rel(alexa_service, alexa_handler, "Envía intenciones", "HTTPS/JSON")
+Rel(alexa_handler, alexa_service, "Respuestas estructuradas", "HTTPS/JSON")
+
+Rel(alexa_handler, biblioteca_service, "Procesa comandos", "Función interna")
+Rel(biblioteca_service, user_db, "Lee/Escribe datos usuario", "AWS SDK")
+Rel(biblioteca_service, cache_layer, "Cache recomendaciones", "Redis protocol")
+
+Rel(biblioteca_service, goodreads_api, "Obtiene recomendaciones", "HTTPS/REST")
+Rel(biblioteca_service, open_library, "Busca información libros", "HTTPS/REST")
+
+@enduml

@@ -1,0 +1,24 @@
+@startuml C1-Context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title Sistema de Biblioteca Alexa - Diagrama de Contexto
+
+Person(usuario, "Usuario", "Persona que utiliza Alexa para gestionar su biblioteca personal")
+
+System(alexa_skill, "Biblioteca Alexa Skill", "Skill de Alexa que permite gestionar libros leídos, obtener recomendaciones y administrar biblioteca personal")
+
+System_Ext(alexa_service, "Amazon Alexa Service", "Plataforma de Amazon que procesa comandos de voz y ejecuta skills")
+
+System_Ext(goodreads_api, "Goodreads API", "Servicio externo para obtener información de libros y recomendaciones")
+
+System_Ext(open_library, "Open Library API", "Base de datos abierta de libros para búsquedas y metadata")
+
+Rel(usuario, alexa_service, "Comandos de voz", "Habla con Alexa")
+Rel(alexa_service, alexa_skill, "Procesa intenciones", "JSON/HTTPS")
+Rel(alexa_skill, alexa_service, "Respuestas", "JSON/HTTPS")
+Rel(alexa_service, usuario, "Respuestas de voz", "Audio")
+
+Rel(alexa_skill, goodreads_api, "Busca recomendaciones", "HTTPS/REST")
+Rel(alexa_skill, open_library, "Obtiene información de libros", "HTTPS/REST")
+
+@enduml

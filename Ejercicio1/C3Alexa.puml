@@ -1,0 +1,49 @@
+@startuml C3-Component
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Biblioteca Service - Diagrama de Componentes
+
+Container(alexa_handler, "Alexa Skill Handler", "Node.js/Lambda", "Punto de entrada de las intenciones")
+
+Container_Boundary(biblioteca_service, "Biblioteca Service") {
+    Component(intent_processor, "Intent Processor", "Node.js", "Procesa y enruta las diferentes intenciones de Alexa")
+    
+    Component(book_manager, "Book Manager", "Node.js", "Gestiona operaciones de libros (agregar, buscar, marcar como leído)")
+    
+    Component(recommendation_engine, "Recommendation Engine", "Node.js", "Genera recomendaciones basadas en historial y preferencias")
+    
+    Component(user_profile_service, "User Profile Service", "Node.js", "Gestiona perfil y preferencias del usuario")
+    
+    Component(book_search_service, "Book Search Service", "Node.js", "Busca información de libros en APIs externas")
+    
+    Component(response_builder, "Response Builder", "Node.js", "Construye respuestas estructuradas para Alexa")
+}
+
+ContainerDb(user_db, "User Database", "DynamoDB", "Datos del usuario")
+ContainerDb(cache_layer, "Cache Layer", "Redis", "Cache de búsquedas")
+
+System_Ext(goodreads_api, "Goodreads API")
+System_Ext(open_library, "Open Library API")
+
+Rel(alexa_handler, intent_processor, "Envía intención", "JSON")
+Rel(intent_processor, response_builder, "Solicita respuesta", "Función")
+
+Rel(intent_processor, book_manager, "Gestionar libros", "Función")
+Rel(intent_processor, recommendation_engine, "Obtener recomendaciones", "Función")
+Rel(intent_processor, user_profile_service, "Gestionar usuario", "Función")
+
+Rel(book_manager, book_search_service, "Buscar libro", "Función")
+Rel(book_manager, user_db, "Guardar libro leído", "AWS SDK")
+
+Rel(recommendation_engine, user_db, "Leer historial", "AWS SDK")
+Rel(recommendation_engine, goodreads_api, "Obtener recomendaciones", "HTTPS")
+Rel(recommendation_engine, cache_layer, "Cache resultados", "Redis")
+
+Rel(book_search_service, open_library, "Buscar información", "HTTPS")
+Rel(book_search_service, cache_layer, "Cache búsquedas", "Redis")
+
+Rel(user_profile_service, user_db, "Gestionar perfil", "AWS SDK")
+
+Rel(response_builder, alexa_handler, "Respuesta estructurada", "JSON")
+
+@enduml
