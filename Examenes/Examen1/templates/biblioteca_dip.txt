@@ -1,0 +1,10 @@
+Libros: 3
+Préstamos: 1
+
+=== LIBROS ===
+ID: 1, Título: Cien Años de Soledad, Autor: Gabriel García Márquez, ISBN: 9780060883287, Disponible: True
+ID: 2, Título: El Principito, Autor: Antoine de Saint-Exupéry, ISBN: 9780156012195, Disponible: True
+ID: 3, Título: 1984, Autor: George Orwell, ISBN: 9780451524935, Disponible: True
+
+=== PRÉSTAMOS ===
+ID: 1, Libro ID: 1, Usuario: Juan Pérez, Fecha: 2025-10-03, Devuelto: True
