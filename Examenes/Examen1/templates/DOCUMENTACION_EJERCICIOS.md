@@ -33,23 +33,6 @@ python templates/ejercicio1_ocp.py
 - **Prueba 3**: Búsqueda por ISBN específico
 - **Prueba 4**: Búsqueda por disponibilidad (nueva estrategia agregada sin modificar código)
 
-### ✅ Verificación
-
-- ✅ Las 4 estrategias funcionan correctamente
-- ✅ `BusquedaPorDisponibilidad` fue agregada SIN modificar el código existente
-- ✅ El método `buscar_libro()` no tiene if/elif (usa estrategias)
-- ✅ Cumple OCP: Abierto a extensión, cerrado a modificación
-
-### 💡 Beneficio del OCP
-
-**Antes (con if/elif):**
-- Para agregar un nuevo criterio de búsqueda, había que modificar el método `buscar_libro()`
-- Violaba OCP (cerrado a modificación)
-
-**Después (con Strategy):**
-- Para agregar un nuevo criterio, solo se crea una nueva clase estrategia
-- No se modifica código existente
-- Cumple OCP perfectamente
 
 ---
 
@@ -93,9 +76,6 @@ python ejercicio2_srp.py
 - Devolución de libro
 - Resumen de SRP aplicado
 
-### ✅ Verificación
-
-El archivo `biblioteca_srp.txt` debe crearse con la información de libros y préstamos.
 
 ---
 
@@ -143,39 +123,6 @@ python ejercicio3_dip.py
 - El archivo `biblioteca_dip.txt` debe crearse
 - El programa debe cambiar entre implementaciones fácilmente
 - No hay referencias a implementaciones concretas en `SistemaBiblioteca`
-
----
-
-## 🎯 Beneficios Demostrados
-
-### OCP (Ejercicio 1)
-- ✅ Sistema abierto a extensión (nuevas estrategias)
-- ✅ Sistema cerrado a modificación (no cambiar código existente)
-- ✅ Patrón Strategy permite agregar criterios de búsqueda fácilmente
-- ✅ Código más mantenible y escalable
-
-### SRP (Ejercicio 2)
-- ✅ Cada clase tiene una única responsabilidad
-- ✅ Fácil mantenimiento: cambiar validación no afecta persistencia
-- ✅ Código más legible y organizado
-- ✅ Reutilización de componentes
-
-### DIP (Ejercicio 3)
-- ✅ Sistema depende de abstracciones
-- ✅ Fácil cambio de implementaciones
-- ✅ Facilita testing (se pueden crear mocks)
-- ✅ Bajo acoplamiento entre componentes
-
----
-
-## 📝 Notas Importantes
-
-1. El código original (`biblioteca_examen.py`) NO fue modificado
-2. La funcionalidad original se mantiene intacta
-3. Se eliminaron comentarios excesivos para mayor claridad
-4. Los 3 ejercicios ejecutan correctamente
-
----
 
 ## 📋 Resumen de Archivos Entregados
 
