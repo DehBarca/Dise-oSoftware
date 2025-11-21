@@ -222,6 +222,4 @@ python Code/ejercicio2_gestor_documentos.py
 
 ## 📝 Autor
 
-Barraza Cárdenas Diego Alejandro
-Proyecto de examen - Diseño de Software  
-Fecha: 2024
+Barraza Cárdenas Diego Alejandro 
