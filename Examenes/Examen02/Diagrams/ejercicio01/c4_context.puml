@@ -1,0 +1,17 @@
+@startuml C4_Context_Tienda_Online
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title Diagrama de Contexto - Sistema de Notificaciones de Pedidos
+
+Person(cliente, "Cliente", "Usuario que realiza pedidos en la tienda online")
+System(sistema_pedidos, "Sistema de Notificaciones de Pedidos", "Procesa pedidos y envía notificaciones multicanal a los clientes")
+System_Ext(email_service, "Servicio de Email", "Proveedor externo de correo electrónico (ej: SendGrid, SES)")
+System_Ext(sms_gateway, "Gateway SMS", "Proveedor de mensajería SMS (ej: Twilio)")
+System_Ext(push_service, "Servicio Push", "Proveedor de notificaciones push (ej: Firebase, OneSignal)")
+
+Rel(cliente, sistema_pedidos, "Realiza pedidos", "HTTPS")
+Rel(sistema_pedidos, email_service, "Envía notificaciones por email", "SMTP/API")
+Rel(sistema_pedidos, sms_gateway, "Envía notificaciones SMS", "API REST")
+Rel(sistema_pedidos, push_service, "Envía notificaciones push", "API REST")
+
+@enduml

@@ -1,0 +1,25 @@
+@startuml C4_Container_Tienda_Online
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+title Diagrama de Contenedores - Sistema de Notificaciones de Pedidos
+
+Person(cliente, "Cliente", "Usuario de la tienda online")
+
+System_Boundary(sistema_notificaciones, "Sistema de Notificaciones de Pedidos") {
+    Container(order_processor, "Procesador de Pedidos", "Python", "Procesa los pedidos y coordina el envío de notificaciones")
+    Container(notification_manager, "Gestor de Notificaciones", "Python", "Administra y envía notificaciones por diferentes canales")
+    ContainerDb(notification_db, "Base de Datos de Notificaciones", "JSON/SQL", "Almacena el historial de notificaciones enviadas")
+}
+
+System_Ext(email_service, "Servicio de Email", "SMTP/SendGrid")
+System_Ext(sms_gateway, "Gateway SMS", "Twilio API")
+System_Ext(push_service, "Servicio Push", "Firebase Cloud Messaging")
+
+Rel(cliente, order_processor, "Crea pedido", "JSON/HTTPS")
+Rel(order_processor, notification_manager, "Solicita envío de notificaciones", "Method Call")
+Rel(notification_manager, notification_db, "Registra notificaciones", "Read/Write")
+Rel(notification_manager, email_service, "Envía emails", "SMTP/REST")
+Rel(notification_manager, sms_gateway, "Envía SMS", "REST API")
+Rel(notification_manager, push_service, "Envía push", "REST API")
+
+@enduml

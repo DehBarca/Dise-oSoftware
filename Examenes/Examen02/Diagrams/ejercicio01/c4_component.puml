@@ -1,0 +1,35 @@
+@startuml C4_Component_Tienda_Online
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Diagrama de Componentes - Sistema de Notificaciones (Order Notification System)
+
+Container(order_api, "API de Pedidos", "REST API", "Recibe pedidos de clientes")
+
+Container_Boundary(notification_system, "Order Notification System") {
+    Component(order_processor, "Order Processor", "Python Class", "Procesa la información del pedido y valida datos")
+    Component(notification_factory, "Notification Factory", "Python Class", "Crea instancias de notificadores según el tipo")
+    Component(email_notifier, "Email Notifier", "Python Component", "Envía notificaciones por email")
+    Component(sms_notifier, "SMS Notifier", "Python Component", "Envía notificaciones SMS")
+    Component(push_notifier, "Push Notifier", "Python Component", "Envía notificaciones push")
+    Component(notification_logger, "Notification Logger", "Python Component", "Registra el historial de notificaciones")
+}
+
+ContainerDb(notification_db, "Notification DB", "JSON Store")
+System_Ext(email_srv, "Email Service")
+System_Ext(sms_srv, "SMS Gateway")
+System_Ext(push_srv, "Push Service")
+
+Rel(order_api, order_processor, "Envía datos del pedido", "JSON")
+Rel(order_processor, notification_factory, "Solicita notificadores", "Method Call")
+Rel(notification_factory, email_notifier, "Crea", "Instantiate")
+Rel(notification_factory, sms_notifier, "Crea", "Instantiate")
+Rel(notification_factory, push_notifier, "Crea", "Instantiate")
+Rel(email_notifier, email_srv, "Envía", "SMTP/API")
+Rel(sms_notifier, sms_srv, "Envía", "REST API")
+Rel(push_notifier, push_srv, "Envía", "REST API")
+Rel(email_notifier, notification_logger, "Registra", "Method Call")
+Rel(sms_notifier, notification_logger, "Registra", "Method Call")
+Rel(push_notifier, notification_logger, "Registra", "Method Call")
+Rel(notification_logger, notification_db, "Persiste", "Write")
+
+@enduml

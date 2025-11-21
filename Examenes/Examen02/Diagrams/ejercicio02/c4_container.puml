@@ -1,0 +1,30 @@
+@startuml C4_Container_Gestor_Documentos
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+title Diagrama de Contenedores - Sistema Generador de Reportes
+
+Person(analista, "Analista/Usuario", "Solicita reportes")
+
+System_Boundary(sistema_reportes, "Sistema Generador de Reportes") {
+    Container(web_app, "Aplicación Web", "Python Flask/Django", "Interfaz para solicitar reportes")
+    Container(report_generator, "Generador de Reportes", "Python", "Procesa datos y genera reportes en diferentes formatos")
+    Container(format_engine, "Motor de Formateo", "Python", "Convierte reportes a PDF, Excel, HTML")
+    Container(delivery_manager, "Gestor de Entrega", "Python", "Administra la entrega de reportes por diferentes canales")
+    ContainerDb(report_history_db, "Base de Datos de Historial", "SQL/JSON", "Almacena el historial de reportes generados")
+}
+
+System_Ext(email_srv, "Servicio de Email", "SMTP Server")
+System_Ext(cloud_storage, "Cloud Storage", "AWS S3 / Google Drive")
+System_Ext(data_sources, "Fuentes de Datos", "ERP/CRM/DB")
+
+Rel(analista, web_app, "Solicita reportes", "HTTPS")
+Rel(web_app, report_generator, "Inicia generación", "Method Call")
+Rel(report_generator, data_sources, "Obtiene datos", "SQL/REST")
+Rel(report_generator, format_engine, "Solicita formateo", "Method Call")
+Rel(format_engine, delivery_manager, "Entrega reporte formateado", "Method Call")
+Rel(delivery_manager, email_srv, "Envía por email", "SMTP")
+Rel(delivery_manager, cloud_storage, "Sube a la nube", "REST API")
+Rel(delivery_manager, report_history_db, "Registra", "Write")
+Rel(analista, cloud_storage, "Descarga", "HTTPS")
+
+@enduml

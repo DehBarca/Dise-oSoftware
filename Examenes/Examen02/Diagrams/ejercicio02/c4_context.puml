@@ -1,0 +1,18 @@
+@startuml C4_Context_Gestor_Documentos
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title Diagrama de Contexto - Sistema Generador de Reportes
+
+Person(analista, "Analista/Usuario", "Usuario que solicita reportes del sistema")
+System(sistema_reportes, "Sistema Generador de Reportes", "Genera reportes en múltiples formatos y los entrega por diferentes medios")
+System_Ext(email_system, "Sistema de Email", "Servicio de correo corporativo")
+System_Ext(cloud_storage, "Almacenamiento en la Nube", "Servicio de almacenamiento cloud (AWS S3, Google Drive)")
+System_Ext(data_sources, "Fuentes de Datos", "Sistemas que proveen datos para los reportes (ERP, CRM, Base de Datos)")
+
+Rel(analista, sistema_reportes, "Solicita reportes", "HTTPS/UI")
+Rel(sistema_reportes, data_sources, "Obtiene datos", "SQL/API")
+Rel(sistema_reportes, email_system, "Envía reportes por email", "SMTP")
+Rel(sistema_reportes, cloud_storage, "Almacena reportes", "API REST")
+Rel(analista, cloud_storage, "Descarga reportes", "HTTPS")
+
+@enduml

@@ -1,0 +1,51 @@
+@startuml C4_Component_Gestor_Documentos
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Diagrama de Componentes - Sistema Generador de Reportes (Report System)
+
+Container(web_interface, "Web Interface", "UI", "Interfaz de usuario")
+
+Container_Boundary(report_system, "Report System") {
+    Component(report_controller, "Report Controller", "Python Class", "Coordina la generación de reportes")
+    Component(data_processor, "Data Processor", "Python Component", "Procesa y prepara datos según el tipo de reporte")
+    Component(sales_report, "Sales Report Generator", "Python Component", "Genera reportes de ventas")
+    Component(inventory_report, "Inventory Report Generator", "Python Component", "Genera reportes de inventario")
+    Component(financial_report, "Financial Report Generator", "Python Component", "Genera reportes financieros")
+    Component(format_factory, "Format Factory", "Python Class", "Crea formateadores según el formato solicitado")
+    Component(pdf_formatter, "PDF Formatter", "Python Component", "Formatea reportes a PDF")
+    Component(excel_formatter, "Excel Formatter", "Python Component", "Formatea reportes a Excel")
+    Component(html_formatter, "HTML Formatter", "Python Component", "Formatea reportes a HTML")
+    Component(delivery_strategy, "Delivery Strategy", "Python Component", "Define estrategia de entrega")
+    Component(email_delivery, "Email Delivery", "Python Component", "Entrega por email")
+    Component(download_delivery, "Download Delivery", "Python Component", "Prepara para descarga")
+    Component(cloud_delivery, "Cloud Delivery", "Python Component", "Sube a la nube")
+    Component(history_logger, "History Logger", "Python Component", "Registra historial")
+}
+
+ContainerDb(history_db, "History DB", "JSON Store")
+System_Ext(email_srv, "Email Service")
+System_Ext(cloud_srv, "Cloud Storage")
+
+Rel(web_interface, report_controller, "Solicita reporte", "JSON")
+Rel(report_controller, data_processor, "Procesa datos", "Method Call")
+Rel(data_processor, sales_report, "Genera reporte ventas", "Method Call")
+Rel(data_processor, inventory_report, "Genera reporte inventario", "Method Call")
+Rel(data_processor, financial_report, "Genera reporte financiero", "Method Call")
+Rel(sales_report, format_factory, "Solicita formateo", "Method Call")
+Rel(inventory_report, format_factory, "Solicita formateo", "Method Call")
+Rel(financial_report, format_factory, "Solicita formateo", "Method Call")
+Rel(format_factory, pdf_formatter, "Crea", "Instantiate")
+Rel(format_factory, excel_formatter, "Crea", "Instantiate")
+Rel(format_factory, html_formatter, "Crea", "Instantiate")
+Rel(pdf_formatter, delivery_strategy, "Entrega formateado", "Method Call")
+Rel(excel_formatter, delivery_strategy, "Entrega formateado", "Method Call")
+Rel(html_formatter, delivery_strategy, "Entrega formateado", "Method Call")
+Rel(delivery_strategy, email_delivery, "Usa", "Strategy Pattern")
+Rel(delivery_strategy, download_delivery, "Usa", "Strategy Pattern")
+Rel(delivery_strategy, cloud_delivery, "Usa", "Strategy Pattern")
+Rel(email_delivery, email_srv, "Envía", "SMTP")
+Rel(cloud_delivery, cloud_srv, "Sube", "REST API")
+Rel(delivery_strategy, history_logger, "Registra", "Method Call")
+Rel(history_logger, history_db, "Persiste", "Write")
+
+@enduml
